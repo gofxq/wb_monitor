@@ -24,6 +24,7 @@ def fetch_latest_posts(user_id):
     """获取指定微博用户的最新博文。"""
     container_id = f'107603{user_id}'
     weibo_api_url = f'https://m.weibo.cn/api/container/getIndex?type=uid&value={user_id}&containerid={container_id}'
+    print(weibo_api_url)
 
     response = requests.get(weibo_api_url)
     if response.status_code == 200:
