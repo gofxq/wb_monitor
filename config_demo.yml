@@ -1,0 +1,12 @@
+# config.yml
+
+user_ids:
+  - 1111681197 #来去之间 请替换为您要监控的实际微博用户ID列表
+  - 2577139143 #亭林镇无业青年
+
+lark:
+  webhook_url: 'https://open.feishu.cn/open-apis/bot/v2/hook/your_webhook_url_here'  # 替换为您的飞书Webhook URL
+  webhook_secret: ''  # 如果使用签名校验，请在此处填写您的密钥；否则留空
+
+# 其他配置
+sent_ids_file: 'sent_ids.json'  # 已发送消息ID的存储文件
