@@ -4,6 +4,19 @@
 
 你是否曾经因为错过微博上关注的用户的最新动态而感到遗憾？你是否希望能第一时间在飞书上收到他们的更新？现在，这个项目将帮助你实现这个愿望！✨
 
+## 启动
+
+```bash
+安装环境
+pip install -r requirement.txt
+```
+
+```bash
+cp config_demo.yml config.yml
+rm sent_ids.json
+python3 wb_monitor.py
+```
+
 ## 项目简介
 
 微博飞书推送助手是一个用 Python 编写的脚本，它可以定时获取指定微博用户的最新动态，并通过飞书 Webhook 将消息推送到你的飞书群聊中。项目支持：
