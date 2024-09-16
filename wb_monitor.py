@@ -131,7 +131,6 @@ def send_lark_message(username, text, webhook_url, secret=None):
 
 def main():
     sent_ids = load_sent_ids()
-    print(sent_ids)
     for user_id_i in USER_IDS:
         user_id = str(user_id_i)
         latest_posts = fetch_latest_posts(user_id)
