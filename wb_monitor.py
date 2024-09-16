@@ -24,7 +24,7 @@ def fetch_latest_posts(user_id):
     """获取指定微博用户的最新博文。"""
     container_id = f'107603{user_id}'
     weibo_api_url = f'https://m.weibo.cn/api/container/getIndex?type=uid&value={user_id}&containerid={container_id}'
-
+    print(weibo_api_url)
     response = requests.get(weibo_api_url)
     if response.status_code == 200:
         data = response.json()
@@ -111,9 +111,6 @@ def send_lark_message(username, text, webhook_url, secret=None):
         "msg_type": "interactive",
         "card": card
     }
-
-    # 如果提供了密钥，计算签名
-
     # 如果提供了密钥，计算签名
     if secret:
         data['sign'] = gen_sign(timestamp=timestamp,secret=secret)
@@ -133,7 +130,9 @@ def send_lark_message(username, text, webhook_url, secret=None):
 
 def main():
     sent_ids = load_sent_ids()
-    for user_id in USER_IDS:
+    print(sent_ids)
+    for user_id_i in USER_IDS:
+        user_id = str(user_id_i)
         latest_posts = fetch_latest_posts(user_id)
         user_sent_ids = sent_ids.get(user_id, set())
         new_posts = [post for post in latest_posts if post['id'] not in user_sent_ids]
