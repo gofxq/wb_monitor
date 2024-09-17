@@ -45,7 +45,8 @@ def fetch_latest_posts(user_id):
                 posts.append({
                     'id': post_id,
                     'text': plain_text,
-                    'username': username
+                    'username': username,
+                    'link': card.get('scheme', weibo_api_url)
                 })
         return posts
     else:
@@ -99,11 +100,10 @@ def send_lark_message(username, text, webhook_url, secret=None):
         },
         "elements": [
             {
-                "tag": "div",
-                "text": {
-                    "tag": "plain_text",
-                    "content": text
-                }
+                "tag": "markdown",
+                "content": text,
+                "text_align": "left",
+                "text_size": "normal"
             }
         ]
     }
@@ -137,7 +137,12 @@ def main():
         user_sent_ids = sent_ids.get(user_id, set())
         new_posts = [post for post in latest_posts if post['id'] not in user_sent_ids]
         for post in new_posts:
-            send_lark_message(post['username'], post['text'], LARK_WEBHOOK_URL, LARK_WEBHOOK_SECRET)
+            send_lark_message(
+                username=post['username'],
+                text=f"{post['text']} \n  [快速链接]({post['link']})",
+                webhook_url = LARK_WEBHOOK_URL,
+                secret = LARK_WEBHOOK_SECRET)
+            time.sleep(1)
             user_sent_ids.add(post['id'])
         sent_ids[user_id] = user_sent_ids
     save_sent_ids(sent_ids)
