@@ -14,7 +14,7 @@ pip install -r requirement.txt
 ```bash
 cp config_demo.yml config.yml
 rm sent_ids.json
-python3 wb_monitor.py
+python3 -m app.wb_monitor
 ```
 
 ## 项目简介
