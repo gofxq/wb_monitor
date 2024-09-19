@@ -5,10 +5,7 @@ import time
 import yaml
 from bs4 import BeautifulSoup
 
-from utils import card, lark
-
-
-demo_webhook_url = "https://open.feishu.cn/open-apis/bot/v2/hook/your_webhook_url_here"
+from utils import lark, lark_boot_webhook_msg
 
 
 # 读取配置文件
@@ -51,18 +48,16 @@ def fetch_latest_posts(user_id):
                 plain_text = soup.get_text()
 
                 # 提取 large_url
-                image_keys = []
+                image_urls = []
                 if mblog.get("pics") is not None:
                     image_urls = [pic["large"]["url"] for pic in mblog.get("pics")]
-                    if image_urls is not None:
-                        image_keys = client.upload_images_from_urls(image_urls)
-                    
+
                 posts.append(
                     {
                         "id": post_id,
                         "text": plain_text,
                         "username": username,
-                        "image_keys": image_keys,
+                        "image_urls": image_urls,
                         "link": card.get("scheme", weibo_api_url),
                     }
                 )
@@ -94,21 +89,26 @@ def save_sent_ids(sent_ids):
 
 
 def main():
+    lark_bot = lark_boot_webhook_msg.LarkBot(LARK_WEBHOOK_URL, LARK_WEBHOOK_SECRET)
     sent_ids = load_sent_ids()
     for user_id_i in USER_IDS:
         user_id = str(user_id_i)
         latest_posts = fetch_latest_posts(user_id)
+        print(latest_posts)
         user_sent_ids = sent_ids.get(user_id, set())
         new_posts = [post for post in latest_posts if post["id"] not in user_sent_ids]
         for post in new_posts:
-            card.send_lark_message(
-                card=card.build_card_message(
-                    post['username'],
+            img_keys = []
+            if post["image_urls"] is not None:
+                img_keys = client.upload_images_from_urls(image_urls=post["image_urls"])
+
+            print(user_id, post)
+            lark_bot.send_card_msg(
+                card=lark_boot_webhook_msg.build_card_message(
+                    post["username"],
                     f"{post['text']}\n[快速链接]({post['link']})",
-                    post["image_keys"],
-                ),
-                webhook_url=LARK_WEBHOOK_URL,
-                secret=LARK_WEBHOOK_SECRET,
+                    img_keys,
+                )
             )
             time.sleep(1)
             user_sent_ids.add(post["id"])
@@ -117,4 +117,5 @@ def main():
 
 
 if __name__ == "__main__":
+
     main()
