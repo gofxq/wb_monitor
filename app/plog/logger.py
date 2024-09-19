@@ -37,6 +37,7 @@ def setup_logger(name='plog',
     log_dir = os.path.dirname(log_file)
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
+        
     print(f'log_file:{log_file}')
     
     formatter = logging.Formatter(format)

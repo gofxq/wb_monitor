@@ -17,15 +17,11 @@ def get_nested_data(data, *path):
             return None
     return current
 
+
 # 使用例子
-data = {
-    'data': {
-        'cards': 
-            {'id': 2, 'name': 'Card2'}
-    }
-}
+data = {"data": {"cards": {"id": 2, "name": "Card2"}}}
 
 
-if __name__ == '__main__':
-  cards = get_nested_data(data, 'data', 'cards','name')
-  print(cards)
+if __name__ == "__main__":
+    cards = get_nested_data(data, "data", "cards", "name")
+    print(cards)

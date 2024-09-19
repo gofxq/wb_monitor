@@ -1,5 +1,6 @@
 import requests
 
+
 def fetch_image(url, headers=None):
     """
     Fetches an image from a URL using optional HTTP headers.
@@ -40,7 +41,7 @@ def save_image_to_file(image_bytes, file_path):
     """
     if image_bytes:
         try:
-            with open(file_path, 'wb') as file:
+            with open(file_path, "wb") as file:
                 file.write(image_bytes)
             return True
         except IOError as e:
@@ -51,13 +52,12 @@ def save_image_to_file(image_bytes, file_path):
         return False
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     # 使用例子
     url = "https://wx2.sinaimg.cn/orj360/002OppCngy1hqc92lj800j61kc9wwb2a02.jpg"
     image_bytes = fetch_wb_image(url)
     if image_bytes:
         print("Image fetched successfully.")
-        save_image_to_file(image_bytes=image_bytes,file_path='test.jpg')
+        save_image_to_file(image_bytes=image_bytes, file_path="test.jpg")
     else:
         print("Failed to fetch image.")

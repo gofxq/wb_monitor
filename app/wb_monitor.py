@@ -5,8 +5,11 @@ import time
 import yaml
 from bs4 import BeautifulSoup
 
-from utils import lark, lark_boot_webhook_msg
+from app.plog.logger import setup_logger
+from app.utils import lark, lark_boot_webhook_msg
 
+
+log = setup_logger(name="monitor")
 
 # 读取配置文件
 with open("config.yml", "r", encoding="utf-8") as f:
@@ -26,7 +29,7 @@ def fetch_latest_posts(user_id):
     """获取指定微博用户的最新博文。"""
     container_id = f"107603{user_id}"
     weibo_api_url = f"https://m.weibo.cn/api/container/getIndex?type=uid&value={user_id}&containerid={container_id}"
-    print(weibo_api_url)
+    log.info(weibo_api_url)
 
     response = requests.get(weibo_api_url)
     if response.status_code == 200:
@@ -63,7 +66,7 @@ def fetch_latest_posts(user_id):
                 )
         return posts
     else:
-        print(f"获取用户 {user_id} 的微博失败，状态码 {response.status_code}")
+        log.warning(f"获取用户 {user_id} 的微博失败，状态码 {response.status_code}")
         return []
 
 
@@ -94,7 +97,8 @@ def main():
     for user_id_i in USER_IDS:
         user_id = str(user_id_i)
         latest_posts = fetch_latest_posts(user_id)
-        print(latest_posts)
+        for post in latest_posts:
+            log.info(post)
         user_sent_ids = sent_ids.get(user_id, set())
         new_posts = [post for post in latest_posts if post["id"] not in user_sent_ids]
         for post in new_posts:
@@ -102,7 +106,7 @@ def main():
             if post["image_urls"] is not None:
                 img_keys = client.upload_images_from_urls(image_urls=post["image_urls"])
 
-            print(user_id, post)
+            log.info(user_id, post)
             lark_bot.send_card_msg(
                 card=lark_boot_webhook_msg.build_card_message(
                     post["username"],

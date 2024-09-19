@@ -1,5 +1,5 @@
 # plog/__init__.py
-from lark_boot_webhook_msg import LarkBot
+from app.utils.lark_boot_webhook_msg import LarkBot
 from .logger import setup_logger
 import logging
 
