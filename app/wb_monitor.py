@@ -97,11 +97,10 @@ def main():
     for user_id_i in USER_IDS:
         user_id = str(user_id_i)
         latest_posts = fetch_latest_posts(user_id)
-        for post in latest_posts:
-            log.info(post)
         user_sent_ids = sent_ids.get(user_id, set())
         new_posts = [post for post in latest_posts if post["id"] not in user_sent_ids]
         for post in new_posts:
+            log.info(post)
             img_keys = []
             if post["image_urls"] is not None:
                 img_keys = client.upload_images_from_urls(image_urls=post["image_urls"])
