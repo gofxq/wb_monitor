@@ -1,7 +1,7 @@
 import requests
 import time
 
-from app.utils.retry import retry
+from tenacity import retry, stop_after_attempt, wait_fixed
 
 
 class LarkClient:
@@ -14,7 +14,7 @@ class LarkClient:
         }
 
     # 使用装饰器
-    @retry(3)
+    @retry(stop=stop_after_attempt(3), wait=wait_fixed(2))
     def get_tenant_access_token(self):
         current_time = time.time()
         if (
