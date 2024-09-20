@@ -6,6 +6,12 @@
 
 ## 启动
 
+
+### 前置准备步骤
+
+通过 [创建自定义机器人](https://open.larkoffice.com/document/client-docs/bot-v3/add-custom-bot?lang=zh-CN) 获取webhook的url和secret。
+
+
 ```bash
 安装环境
 pip install -r requirement.txt
