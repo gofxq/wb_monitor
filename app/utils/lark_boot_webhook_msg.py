@@ -4,10 +4,24 @@ import time
 import hashlib
 import hmac
 import base64
+from tenacity import retry, stop_after_attempt, wait_fixed
 import yaml
 
 
 demo_webhook_url = "https://open.feishu.cn/open-apis/bot/v2/hook/your_webhook_url_here"
+
+
+def handle_request_exception(err):
+    """根据不同的异常类型返回相应的错误代码和消息"""
+    if isinstance(err, requests.exceptions.HTTPError):
+        error_code = 1
+    elif isinstance(err, requests.exceptions.ConnectionError):
+        error_code = 2
+    elif isinstance(err, requests.exceptions.Timeout):
+        error_code = 3
+    else:
+        error_code = 4
+    return {"code": error_code, "msg": str(err)}
 
 
 class LarkBot:
@@ -24,9 +38,11 @@ class LarkBot:
             print(f"send lark msg failed:{title},{body},{e}")
 
         return rsp
-
+    
+    @retry(stop=stop_after_attempt(3), wait=wait_fixed(2))
     def send_card_msg(self, card):
         """通过飞书Webhook发送卡片消息，支持签名校验。"""
+
         timestamp = str(int(time.time()))
         headers = {"Content-Type": "application/json"}
         data = {"timestamp": timestamp, "msg_type": "interactive", "card": card}
@@ -34,21 +50,13 @@ class LarkBot:
         if self.webhook_secret:
             data["sign"] = gen_sign(timestamp=timestamp, secret=self.webhook_secret)
 
-        if self.webhook_url == "demo_webhook_url":
-            return {"status": "debug_mode", "data": data}
-
         try:
             response = requests.post(self.webhook_url, headers=headers, json=data)
             response.raise_for_status()  # 触发HTTPError，如果状态不是200
-            return {"code": 0, "msg": ""}
-        except requests.exceptions.HTTPError as err_h:
-            return {"code": 1, "msg": str(err_h)}
-        except requests.exceptions.ConnectionError as err_c:
-            return {"code": 2, "msg": str(err_c)}
-        except requests.exceptions.Timeout as err_t:
-            return {"code": 3, "msg": str(err_t)}
         except requests.exceptions.RequestException as err:
-            return {"code": 4, "msg": str(err)}
+            return handle_request_exception(err)
+        
+        return {"code": 0, "msg": ""}
 
 
 def gen_sign(timestamp, secret):
