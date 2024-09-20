@@ -1,6 +1,8 @@
 import requests
 import time
 
+from app.utils.retry import retry
+
 
 class LarkClient:
     def __init__(self, app_id, app_secret):
@@ -11,6 +13,8 @@ class LarkClient:
             "expire_time": 0,  # Token 过期的时间戳
         }
 
+    # 使用装饰器
+    @retry(3)
     def get_tenant_access_token(self):
         current_time = time.time()
         if (
@@ -25,6 +29,7 @@ class LarkClient:
             data = {"app_id": self.app_id, "app_secret": self.app_secret}
             response = requests.post(url, json=data, headers=headers)
             res_data = response.json()
+            print(res_data)
             if res_data.get("code") == 0:
                 self.token_info["tenant_access_token"] = res_data["tenant_access_token"]
                 expires_in = res_data["expire"]  # Token 有效期（秒）
