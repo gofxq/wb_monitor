@@ -9,13 +9,18 @@
 
 ### 前置准备步骤
 
-通过 [创建自定义机器人](https://open.larkoffice.com/document/client-docs/bot-v3/add-custom-bot?lang=zh-CN) 获取webhook的url和secret。
+1. 通过 [创建自定义机器人](https://open.larkoffice.com/document/client-docs/bot-v3/add-custom-bot?lang=zh-CN) 获取webhook的url和secret。
 
+2. 如果需要支持发送图片消息，需要创建飞书应用，使用机器人能力[机器人能力](https://open.larkoffice.com/document/client-docs/bot-v3/bot-overview)进行图片image_key的获取。如果不需要，配置中直接留空即可。
+
+3. 安装环境
 
 ```bash
 安装环境
 pip install -r requirement.txt
 ```
+
+4. 启动
 
 ```bash
 cp config_demo.yml config.yml

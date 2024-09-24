@@ -51,6 +51,10 @@ class LarkClient:
         - image_keys: 成功上传的图片的 image_key 列表
         """
         image_keys = []
+
+        if not self.app_id:
+            return image_keys
+
         for url in image_urls:
             image_key = self.upload_image_from_url(url, image_type)
             image_keys.append(image_key)
