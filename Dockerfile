@@ -1,19 +1,19 @@
-# 使用官方 Python 运行环境作为基础镜像
+# 使用官方Python镜像。你可以选择特定的Python版本
 FROM python:3.12-slim
 
-# 设置工作目录
+# 设置工作目录为根目录
 WORKDIR /
 
-# 复制依赖文件到容器中
-COPY requirements.txt .
-COPY . .
+# 将app目录下的文件复制到容器的/app目录中
+COPY app /app
 
-# 安装依赖
-RUN pip install --no-cache-dir -r requirements.txt
+# 将 config_demo.yml 文件复制到/app目录并重命名为 config.yml
+COPY config_demo.yml config.yml
+COPY requirements.txt requirements.txt
 
-# 设置时区，便于定时任务按本地时间执行
-ENV TZ=Asia/Shanghai
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+# 安装任何需要的包和推荐的安全性能工具
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt
 
-# 运行定时任务
-CMD ["python","-m", "app.wb_monitor"]
+# 容器启动时执行的命令，注意更改为从app模块运行checker
+CMD ["python", "-m", "app.checker"]

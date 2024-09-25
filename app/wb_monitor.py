@@ -91,7 +91,7 @@ def save_sent_ids(sent_ids):
         json.dump(serializable_sent_ids, f, ensure_ascii=False, indent=4)
 
 
-def main():
+def check():
     lark_bot = lark_boot_webhook_msg.LarkBot(LARK_WEBHOOK_URL, LARK_WEBHOOK_SECRET)
     sent_ids = load_sent_ids()
     for user_id_i in USER_IDS:
@@ -120,5 +120,4 @@ def main():
 
 
 if __name__ == "__main__":
-
-    main()
+    check()
