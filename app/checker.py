@@ -8,6 +8,7 @@ def sleep_until_next_period(period_seconds):
     seconds_since_midnight = (now - now.replace(hour=0, minute=0, second=0, microsecond=0)).total_seconds()
     next_period = (seconds_since_midnight // period_seconds + 1) * period_seconds
     sleep_duration = next_period - seconds_since_midnight
+    print(f'sleep {sleep_duration} s')
     time.sleep(sleep_duration)
 
 if __name__ == "__main__":

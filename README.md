@@ -6,6 +6,9 @@
 
 ## 启动
 
+```bash
+docker run --name checker -v ./config.yml:/config.yml -v ./sent_ids.json:/sent_ids.json  checker
+```
 
 ### 前置准备步骤
 
