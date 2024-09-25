@@ -60,6 +60,7 @@ class LarkClient:
             image_keys.append(image_key)
         return image_keys
 
+    @retry(stop=stop_after_attempt(3), wait=wait_fixed(2))
     def upload_image_from_url(self, image_url, image_type="message"):
         """
         通过图片 URL 上传图片，获取 image_key。
