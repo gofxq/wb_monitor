@@ -17,7 +17,7 @@
 
 ```bash
 安装环境
-pip install -r requirement.txt
+pip install -r requirements.txt
 ```
 
 4. 启动
