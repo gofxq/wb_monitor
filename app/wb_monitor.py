@@ -3,7 +3,6 @@ import json
 import os
 import time
 import yaml
-from bs4 import BeautifulSoup
 
 from app.plog.logger import setup_logger
 from app.utils import lark, lark_boot_webhook_msg
@@ -47,9 +46,9 @@ def fetch_latest_posts(user_id):
                 post_id = mblog.get("id")
                 text = mblog.get("text")
                 # 清理文本，移除HTML标签
-                soup = BeautifulSoup(text, "html.parser")
-                plain_text = soup.get_text()
-
+                # soup = BeautifulSoup(text, "html.parser")
+                # plain_text = soup.get_text()
+                plain_text = text
                 # 提取 large_url
                 image_urls = []
                 if mblog.get("pics") is not None:
